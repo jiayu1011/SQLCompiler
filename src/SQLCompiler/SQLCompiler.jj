@@ -1,0 +1,80 @@
+// javacc选项设置
+options {
+    STATIC = false;
+}
+
+// 解析器类定义
+PARSER_BEGIN(SQLCompiler)
+import java.io.*;
+
+public class SQLCompiler {
+    public static void main(String []args) throws ParseException{
+        SQLCompiler parser = new SQLCompiler(System.in);
+        parser.createTable();
+    }
+
+
+}
+PARSER_END(SQLCompiler)
+
+/***** 扫描器定义 *****/
+
+// 空格跳过，不扫描
+SKIP : {
+" "|"\t"|"\r"|"\n"
+}
+
+// TOKEN定义
+TOKEN : {
+<CREATE: "CREATE"|"create">|
+<UPDATE: "UPDATE"|"update">|
+<INSERT: "INSERT"|"insert">|
+<DELETE: "DELETE"|"delete">|
+<SELECT: "SELECT"|"select">|
+<DROP: "DROP"|"drop">|
+
+<TABLE: "TABLE"|"table">|
+<INDEX: "INDEX"|"index">|
+<IN: "IN"|"in">|
+<INTO: "INTO"|"into">|
+<VALUES: "VALUES"|"values">|
+<AS: "AS"|"as">|
+<SET: "SET"|"set">|
+<WHERE: "WHERE"|"where">|
+
+
+
+<SEMI: ";">|
+<LP: "(">|
+<RP: ")">|
+<COMMA: ",">|
+<DOT: ".">|
+<EQUAL: "=">|
+<STAR: "*">|
+
+<INT: "0"|(["1"-"9"](["0"-"9"])*)>|
+<STRING: "\""(["a"-"z", "A"-"Z", "0"-"9"])*"\"">|
+<ID: ["a"-"z"](["a"-"z", "A"-"Z", "0"-"9"])*>
+
+
+
+
+}
+
+
+// 解析器定义
+void createTable():
+{
+    Token table_name;
+}
+{
+    <CREATE> <TABLE> table_name=<ID> <EOF>
+    {
+        System.out.format("create table %s success!\n", table_name);
+
+    }
+}
+
+
+
+
